@@ -23,23 +23,23 @@ app.use((req, res, next) => {
     next();
   });
 
-
-  app.use(bodyParser.json());
+app.use(bodyParser.json());
+  
 
   app.post('/api/auth/signup', (req, res, next) => {
     console.log(req)
-    //  bcrypt.hash(req.body.password, 10)
-    //    .then(hash => {
-    //     const user = new User({
-    //       email: req.body.email,
-    //       password: hash
-    //     });
-    //     user.save()
-    //       .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-    //       .catch(error => res.status(400).json({ error }));
-    //   })
-    //   .catch(error => res.status(500).json({ error }));
-    //   next();
+     bcrypt.hash(req.body.password, 10)
+       .then(hash => {
+        const user = new User({
+          email: req.body.email,
+          password: hash
+        });
+        user.save()
+          .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+          .catch(error => res.status(400).json({ error }));
+      })
+      .catch(error => res.status(500).json({ error }));
+      next();
   });
 
   app.get('/api/sauces', (req, res, next) => {
@@ -74,7 +74,5 @@ app.use((req, res, next) => {
     res.status(201).json(sauces);
     next();
   });
-
-
   
 module.exports = app;
