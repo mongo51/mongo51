@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 
 const User = require('./models/User');
+const mongooseUniqueValidator = require('mongoose-unique-validator');
 
 mongoose.connect('mongodb+srv://salim:tutrouverapa@cluster0.mhffo.mongodb.net/?retryWrites=true&w=majority'
 ,
@@ -27,19 +28,19 @@ app.use(bodyParser.json());
   
 
   app.post('/api/auth/signup', (req, res, next) => {
-    console.log(req)
+    console.log(req.body)
      bcrypt.hash(req.body.password, 10)
        .then(hash => {
         const user = new User({
           email: req.body.email,
           password: hash
         });
+        console.log(user);
         user.save()
-          .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+          .then(() => res.status(201).json({user}))
           .catch(error => res.status(400).json({ error }));
       })
       .catch(error => res.status(500).json({ error }));
-      next();
   });
 
   app.get('/api/sauces', (req, res, next) => {
@@ -71,8 +72,7 @@ app.use(bodyParser.json());
         userDisLikes: ['likes', 'number', 'of', 'disLikes']
       },
     ];
-    res.status(201).json(sauces);
-    next();
+    res.status(200).json(sauces);
   });
   
 module.exports = app;
