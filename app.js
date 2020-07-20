@@ -44,6 +44,7 @@ app.use(bodyParser.json());
           .catch(error => res.status(400).json({ error }));
       })
       .catch(error => res.status(500).json({ error }));
+    
   });
 
 app.post('/api/auth/login', (req, res, next) => {
@@ -69,19 +70,26 @@ app.post('/api/auth/login', (req, res, next) => {
     .catch(error => res.status(500).json({error}))
   })
   .catch(error => res.status(500).json({error}))
+ 
+})
+
+app.post('/api/sauces', (req, res, next) => {
+  const sauce = new Sauces({...req.body})
+  console.log(sauce);
+  sauce.save()
+  .then(()=> res.status(201).json({message : 'Nouvel sauce ajoutée !'}))
+  .catch(error => res.status(400).json({error}));
 })
 
 
+  // app.get('/api/sauces', (req, res, next) => {
+  //   res.status(200).json();
+  // });
 
-
-  app.get('/api/sauces', (req, res, next) => {
-    res.status(200).json();
-  });
-
-  app.get('/api/sauces/:id'), (req, res, next) =>{
-    Sauces.findOne({ _id: req.params.id})
-    .then(sauce => res.status(200).json(sauce))
-    .catch(error => res.status(400).json({error}));
-  }
+  // app.get('/api/sauces/:id'), (req, res, next) =>{
+  //   Sauces.findOne({ _id: req.params.id})
+  //   .then(sauce => res.status(200).json(sauce))
+  //   .catch(error => res.status(400).json({error}));
+  // }
   
 module.exports = app;
